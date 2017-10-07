@@ -1,0 +1,60 @@
+import numpy as np
+
+from polygon_mesh.polygon_mesh import PolygonMesh
+
+
+class CubesMesh(PolygonMesh):
+    EDGE_LENGTH = 200
+
+    def __init__(self):
+        super().__init__()
+        self._init_cubes_vertices()
+        self._init_faces_point_indexes()
+
+    def _init_cubes_vertices(self):
+        self._vertices = [
+            np.array([0, 0, 0]),
+            np.array([self.EDGE_LENGTH, 0, 0]),
+            np.array([self.EDGE_LENGTH, -self.EDGE_LENGTH, 0]),
+            np.array([0, -self.EDGE_LENGTH, 0]),
+            np.array([0, 0, -self.EDGE_LENGTH]),
+            np.array([self.EDGE_LENGTH, 0, -self.EDGE_LENGTH]),
+            np.array([self.EDGE_LENGTH, -self.EDGE_LENGTH, -self.EDGE_LENGTH]),
+            np.array([0, -self.EDGE_LENGTH, -self.EDGE_LENGTH]),
+            np.array([0, 0, self.EDGE_LENGTH]),
+            np.array([0, -self.EDGE_LENGTH, self.EDGE_LENGTH]),
+            np.array([-self.EDGE_LENGTH, -self.EDGE_LENGTH, self.EDGE_LENGTH]),
+            np.array([-self.EDGE_LENGTH, 0, self.EDGE_LENGTH]),
+            np.array([-self.EDGE_LENGTH, 0, 0]),
+            np.array([-self.EDGE_LENGTH, -self.EDGE_LENGTH, 0]),
+            np.array([-self.EDGE_LENGTH, self.EDGE_LENGTH, 0]),
+            np.array([0, self.EDGE_LENGTH, 0]),
+            np.array([-self.EDGE_LENGTH, 0, -self.EDGE_LENGTH]),
+            np.array([-self.EDGE_LENGTH, self.EDGE_LENGTH, -self.EDGE_LENGTH]),
+            np.array([0, self.EDGE_LENGTH, -self.EDGE_LENGTH])
+        ]
+
+    def _init_faces_point_indexes(self):
+        self._faces_point_indexes = [
+            [0, 1, 2, 3],
+            [0, 1, 5, 4],
+            [1, 2, 6, 5],
+            [2, 3, 7, 6],
+            [3, 0, 4, 7],
+            [4, 5, 6, 7],
+            [11, 8, 9, 10],
+            [11, 8, 0, 12],
+            [8, 9, 3, 0],
+            [9, 10, 13, 3],
+            [10, 11, 12, 13],
+            [12, 0, 3, 13],
+            [14, 15, 0, 12],
+            [14, 15, 18, 17],
+            [15, 0, 4, 18],
+            [0, 12, 16, 4],
+            [12, 14, 17, 16],
+            [17, 18, 4, 16]
+        ]
+
+
+
