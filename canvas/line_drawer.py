@@ -1,6 +1,6 @@
 # Attention! Optimized code below! Take care of your eyes.
 class LineDrawer:
-    DASH_LENGTH = 4
+    DASH_LENGTH = 2
 
     def __init__(self, canvas, x1, y1, z1, x2, y2, z2):
         self._canvas = canvas
@@ -52,4 +52,4 @@ class LineDrawer:
         return point_index % (self.DASH_LENGTH * 2) > self.DASH_LENGTH
 
     def _draw_point(self, x, y, z, point_index):
-        self._canvas.draw_point(x, y, z, self._is_draw_dash_point(point_index))
+        self._canvas.draw_point(x, y, z, is_dash=self._is_draw_dash_point(point_index))
