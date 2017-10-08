@@ -8,6 +8,7 @@ class EventDispatcher:
         self._event_dispatchers = {
             sdl2.SDL_WINDOWEVENT: self._dispatch_window_event,
             sdl2.SDL_KEYDOWN: self._dispatch_keydown_event,
+            sdl2.SDL_KEYUP: self._dispatch_keyup_event,
             sdl2.SDL_QUIT: self._dispatch_quit_event
         }
 
@@ -22,6 +23,9 @@ class EventDispatcher:
 
     def _dispatch_keydown_event(self, event):
         self._window.on_key_pressed(event.key.keysym.sym)
+
+    def _dispatch_keyup_event(self, event):
+        self._window.on_key_up(event.key.keysym.sym)
 
     def _dispatch_quit_event(self, _):
         self._event_loop.stop()

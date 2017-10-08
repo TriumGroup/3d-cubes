@@ -34,6 +34,9 @@ class Window:
     def on_key_pressed(self, key_code):
         self._renderer.on_key_pressed(key_code)
 
+    def on_key_up(self, key_code):
+        self._renderer.on_key_up(key_code)
+
     def close(self):
         sdl2.SDL_DestroyWindow(self.sdl_window)
         sdl2.SDL_Quit()
