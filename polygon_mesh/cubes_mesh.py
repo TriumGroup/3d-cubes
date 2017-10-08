@@ -4,7 +4,7 @@ from polygon_mesh.polygon_mesh import PolygonMesh
 
 
 class CubesMesh(PolygonMesh):
-    EDGE_LENGTH = 50
+    EDGE_LENGTH = 40
 
     def __init__(self):
         super().__init__()

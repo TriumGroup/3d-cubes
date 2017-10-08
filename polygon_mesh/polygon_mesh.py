@@ -14,8 +14,8 @@ class PolygonMesh:
         # self._x_translation = 200
         # self._y_translation = 200
         # self._z_translation = 100
-        self._x_translation = -100
-        self._y_translation = 100
+        self._x_translation = -80
+        self._y_translation = 80
         self._z_translation = 0
         self._world_matrix = None
 
