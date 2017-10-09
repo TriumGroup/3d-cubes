@@ -7,6 +7,7 @@ class PolygonMesh:
     def __init__(self):
         self.camera = Camera()
         self._vertices = []
+        self._translated_vertices = []
         self._faces_point_indexes = []
         self._x_rotation_angle = 1.2
         self._y_rotation_angle = 2.0
@@ -17,16 +18,13 @@ class PolygonMesh:
         self._x_translation = -80
         self._y_translation = 80
         self._z_translation = 0
-        self._world_matrix = None
-
-    def faces(self):
-        return map(self._face, self._faces_point_indexes)
+        self._world_matrix = np.array([])
 
     def rotate(self, x, y, z):
         self._x_rotation_angle += x
         self._y_rotation_angle += y
         self._z_rotation_angle += z
-        self._world_matrix = None
+        self._translated_vertices = []
 
     def rotate_camera(self, distance=0, etha=0, phi=0):
         self.camera.observation_point_distance += distance
@@ -37,24 +35,32 @@ class PolygonMesh:
             self.camera.x_axis_angle,
             self.camera.z_axis_angle
         )
-        self._world_matrix = None
+        self._translated_vertices = []
+
+    def faces(self):
+        if len(self._translated_vertices) == 0:
+            self._translate_vertices()
+        return map(self._face, self._faces_point_indexes)
+
+    def _translate_vertices(self):
+        self._world_matrix = self._prepare_world_matrix()
+        self._translated_vertices = list(map(self._translate_vertex, self._vertices))
+
+    def _translate_vertex(self, vertex):
+        x, y, z, _ = vertex.vector.dot(self._world_matrix)
+        return trunc(x), trunc(y), trunc(z)
 
     def _face(self, face_point_indexes):
         face_points = map(self._face_point, face_point_indexes)
         return tuple(face_points)
 
     def _face_point(self, point_index):
-        point = self._vertices[point_index]
-        vector = np.append(point, 1)
-        x, y, z, _ = vector.dot(self._world_vector())
-        return trunc(x), trunc(y), trunc(z)
+        return self._translated_vertices[point_index]
 
-    def _world_vector(self):
-        if self._world_matrix is None:
-            rotation = self._x_rotation().dot(self._y_rotation()).dot(self._z_rotation())
-            camera_view = self._look_at_lh().dot(self._perspective_fov_lh())
-            self._world_matrix = rotation.dot(self._translation()).dot(camera_view)
-        return self._world_matrix
+    def _prepare_world_matrix(self):
+        rotation = self._x_rotation().dot(self._y_rotation()).dot(self._z_rotation())
+        camera_view = self._look_at_lh().dot(self._perspective_fov_lh())
+        return rotation.dot(self._translation()).dot(camera_view)
 
     def _look_at_lh(self):
         up_vect = np.array([0, 1, 0])

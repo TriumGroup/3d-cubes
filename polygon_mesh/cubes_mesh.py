@@ -1,6 +1,5 @@
-import numpy as np
-
 from polygon_mesh.polygon_mesh import PolygonMesh
+from polygon_mesh.point import Point
 
 
 class CubesMesh(PolygonMesh):
@@ -13,25 +12,25 @@ class CubesMesh(PolygonMesh):
 
     def _init_cubes_vertices(self):
         self._vertices = [
-            np.array([0, 0, 0]),
-            np.array([self.EDGE_LENGTH, 0, 0]),
-            np.array([self.EDGE_LENGTH, -self.EDGE_LENGTH, 0]),
-            np.array([0, -self.EDGE_LENGTH, 0]),
-            np.array([0, 0, -self.EDGE_LENGTH]),
-            np.array([self.EDGE_LENGTH, 0, -self.EDGE_LENGTH]),
-            np.array([self.EDGE_LENGTH, -self.EDGE_LENGTH, -self.EDGE_LENGTH]),
-            np.array([0, -self.EDGE_LENGTH, -self.EDGE_LENGTH]),
-            np.array([0, 0, self.EDGE_LENGTH]),
-            np.array([0, -self.EDGE_LENGTH, self.EDGE_LENGTH]),
-            np.array([-self.EDGE_LENGTH, -self.EDGE_LENGTH, self.EDGE_LENGTH]),
-            np.array([-self.EDGE_LENGTH, 0, self.EDGE_LENGTH]),
-            np.array([-self.EDGE_LENGTH, 0, 0]),
-            np.array([-self.EDGE_LENGTH, -self.EDGE_LENGTH, 0]),
-            np.array([-self.EDGE_LENGTH, self.EDGE_LENGTH, 0]),
-            np.array([0, self.EDGE_LENGTH, 0]),
-            np.array([-self.EDGE_LENGTH, 0, -self.EDGE_LENGTH]),
-            np.array([-self.EDGE_LENGTH, self.EDGE_LENGTH, -self.EDGE_LENGTH]),
-            np.array([0, self.EDGE_LENGTH, -self.EDGE_LENGTH])
+            Point(0, 0, 0),
+            Point(self.EDGE_LENGTH, 0, 0),
+            Point(self.EDGE_LENGTH, -self.EDGE_LENGTH, 0),
+            Point(0, -self.EDGE_LENGTH, 0),
+            Point(0, 0, -self.EDGE_LENGTH),
+            Point(self.EDGE_LENGTH, 0, -self.EDGE_LENGTH),
+            Point(self.EDGE_LENGTH, -self.EDGE_LENGTH, -self.EDGE_LENGTH),
+            Point(0, -self.EDGE_LENGTH, -self.EDGE_LENGTH),
+            Point(0, 0, self.EDGE_LENGTH),
+            Point(0, -self.EDGE_LENGTH, self.EDGE_LENGTH),
+            Point(-self.EDGE_LENGTH, -self.EDGE_LENGTH, self.EDGE_LENGTH),
+            Point(-self.EDGE_LENGTH, 0, self.EDGE_LENGTH),
+            Point(-self.EDGE_LENGTH, 0, 0),
+            Point(-self.EDGE_LENGTH, -self.EDGE_LENGTH, 0),
+            Point(-self.EDGE_LENGTH, self.EDGE_LENGTH, 0),
+            Point(0, self.EDGE_LENGTH, 0),
+            Point(-self.EDGE_LENGTH, 0, -self.EDGE_LENGTH),
+            Point(-self.EDGE_LENGTH, self.EDGE_LENGTH, -self.EDGE_LENGTH),
+            Point(0, self.EDGE_LENGTH, -self.EDGE_LENGTH)
         ]
 
     def _init_faces_point_indexes(self):
