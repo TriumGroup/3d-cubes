@@ -1,4 +1,4 @@
-import sys
+import cProfile
 
 from event_loop import EventLoop
 from window import Window
@@ -11,4 +11,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    cProfile.run('sys.exit(main())')

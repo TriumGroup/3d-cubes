@@ -1,6 +1,8 @@
-import sdl2
+import ctypes
 import datetime
 from math import trunc
+
+import sdl2
 
 from canvas.canvas import Canvas
 from polygon_mesh.cubes_mesh import CubesMesh
@@ -24,8 +26,14 @@ class Renderer:
             -1,
             sdl2.SDL_RENDERER_ACCELERATED
         )
+        self._texture = sdl2.SDL_CreateTexture(self.sdl_renderer,
+                                               sdl2.SDL_PIXELFORMAT_ABGR8888,
+                                               sdl2.SDL_TEXTUREACCESS_STREAMING,
+                                               400,
+                                               400)
         self._canvas = Canvas(self)
         self._cubes = CubesMesh()
+        self._frames = 0
         self.grow_step = 0.1
 
     @property
@@ -85,15 +93,34 @@ class Renderer:
             self._canvas.draw_line(point_c, point_d)
             self._canvas.draw_line(point_d, point_a)
 
+    W = 400 * sdl2.SDL_BYTESPERPIXEL(sdl2.SDL_PIXELFORMAT_ABGR8888)
+
     def _render_canvas_texture(self):
+        displayrect = sdl2.SDL_Rect(0, 0, 400, 400)
+        # [ctypes.c_byte(x) for row in self._canvas.texture for point in row for x in point.color]
+        # pixels = ctypes.cast(pixels, ctypes.POINTER(ctypes.c_byte))
         self._clear_draw_field()
-        for x, x_row in enumerate(self._canvas.texture):
-            for y, pixel_info in enumerate(x_row):
-                color = pixel_info.color
-                if color != self.WHITE_COLOR:
-                    sdl2.SDL_SetRenderDrawColor(self.sdl_renderer, *pixel_info.color)
-                    sdl2.SDL_RenderDrawPoint(self.sdl_renderer, x, y)
+        sdl2.SDL_UpdateTexture(self._texture, None, self.extract_pixels(), self.W)
+        sdl2.SDL_RenderCopy(self.sdl_renderer, self._texture, None, displayrect)
         sdl2.SDL_RenderPresent(self.sdl_renderer)
+        #
+        # for x, x_row in enumerate(self._canvas.texture):
+        #     for y, pixel_info in enumerate(x_row):
+        #         color = pixel_info.color
+        #         if color != self.WHITE_COLOR:
+        #             sdl2.SDL_SetRenderDrawColor(self.sdl_renderer, *pixel_info.color)
+        #             sdl2.SDL_RenderDrawPoint(self.sdl_renderer, x, y)
+
+    def extract_pixels(self):
+        pixels = (ctypes.c_char * 640000)()
+        i = 0
+        for row in self._canvas.texture:
+            for point in row:
+                for x in point.color:
+                    pixels[i] = ctypes.c_char(x)
+                    i += 1
+
+        return pixels
 
     def _clear_draw_field(self):
         sdl2.SDL_SetRenderDrawColor(self.sdl_renderer, *self.WHITE_COLOR)
