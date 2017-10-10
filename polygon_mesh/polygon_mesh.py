@@ -1,15 +1,16 @@
 import numpy as np
-from math import sin, cos, tan, trunc, sqrt
+from math import sin, cos, tan, trunc
 from camera import Camera
 
 
 class PolygonMesh:
-    def __init__(self, renderer):
+    def __init__(self, size):
         self.camera = Camera()
         self._vertices = []
         self._translated_vertices = []
         self._faces_point_indexes = []
-        self._width, self._height = renderer.size
+        self._width = size
+        self._height = size
         self._x_rotation_angle = 0.1
         self._y_rotation_angle = 2.5
         self._z_rotation_angle = -1
@@ -49,12 +50,6 @@ class PolygonMesh:
         x, y, z = x / w, y / w, z
         x = x * self._width + self._width / 2
         y = -y * self._height + self._height / 2
-        # z = sqrt(
-        #     (vertex.x - self.camera.position()[0])**2 +
-        #     (vertex.y - self.camera.position()[1])**2 +
-        #     (vertex.z - self.camera.position()[2])**2
-        # )
-
         return trunc(x), trunc(y), trunc(z)
 
     def _face(self, face_point_indexes):
@@ -106,8 +101,9 @@ class PolygonMesh:
             [ex, ey, ez, 1]
         ])
 
-    def _perspective_fov_lh(self, aspect=1, fov=0.78, z_near=1, z_far=100):
+    def _perspective_fov_lh(self, fov=0.78, z_near=1, z_far=100):
         tangent = 1 / tan(fov * 0.5)
+        aspect = self._width / self._height
         return np.array([
             [tangent / aspect, 0, 0, 0],
             [0, tangent, 0, 0],

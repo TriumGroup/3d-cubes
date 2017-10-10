@@ -13,7 +13,7 @@ class Renderer:
     Y_CODE = 121
     Z_CODE = 122
     P_CODE = 112
-    R_CODE = 113
+    R_CODE = 114
     E_CODE = 101
     D_CODE = 100
     L_SHIFT_CODE = 1073742049
@@ -26,7 +26,7 @@ class Renderer:
             sdl2.SDL_RENDERER_ACCELERATED
         )
         self._canvas = Canvas(self)
-        self._cubes = CubesMesh(self)
+        self._cubes = CubesMesh(self.size[1])
         self.grow_step = 0.1
 
     @property

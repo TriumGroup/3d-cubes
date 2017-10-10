@@ -5,8 +5,8 @@ from polygon_mesh.point import Point
 class CubesMesh(PolygonMesh):
     EDGE_LENGTH = 40
 
-    def __init__(self, renderer):
-        super().__init__(renderer)
+    def __init__(self, size):
+        super().__init__(size)
         self._init_cubes_vertices()
         self._init_faces_point_indexes()
 
