@@ -25,7 +25,7 @@ class Renderer:
             sdl2.SDL_RENDERER_ACCELERATED
         )
         self._canvas = Canvas(self)
-        self._cubes = CubesMesh()
+        self._cubes = CubesMesh(self)
         self.grow_step = 0.1
 
     @property
@@ -36,7 +36,7 @@ class Renderer:
         self.redraw()
 
     def redraw(self):
-        d = datetime.datetime.now()
+        # d = datetime.datetime.now()
         self._canvas.clear()
         # print(datetime.datetime.now() - d)
         self._draw_mesh()
@@ -52,9 +52,9 @@ class Renderer:
         elif key_code == self.Z_CODE:
             self._cubes.rotate(0, 0, self.grow_step)
         elif key_code == self.P_CODE:
-            self._cubes.rotate_camera(phi=self.grow_step * 2)
+            self._cubes.rotate_camera(phi=self.grow_step)
         elif key_code == self.E_CODE:
-            self._cubes.rotate_camera(etha=self.grow_step * 2)
+            self._cubes.rotate_camera(etha=self.grow_step)
         elif key_code == self.D_CODE:
             self._cubes.rotate_camera(distance=self.grow_step * 1000)
         elif key_code == self.L_SHIFT_CODE:
@@ -69,7 +69,7 @@ class Renderer:
 
     def _draw_mesh(self):
         for index, points in enumerate(self._cubes.faces()):
-            k_for_color = trunc(index / 6)
+            k_for_color = index // 6
             if k_for_color == 0:
                 color_rgba = (0, 0, 255, 255)
             elif k_for_color == 1:

@@ -17,11 +17,11 @@ class Canvas:
 
     def clear(self):
         self.texture = [
-            [self.BLANK_POINT] * self._width for _ in range(self._height)
+            [self.BLANK_POINT] * self._height for _ in range(self._width)
         ]
 
     def draw_point(self, x, y, z, is_dash=False, color=(0, 0, 0, 255)):
-        point_in_canvas = 0 <= x <= self._width and 0 <= y <= self._height
+        point_in_canvas = 0 <= x < self._width and 0 <= y < self._height
         if point_in_canvas and (self.texture[x][y].z_index < z or is_dash):
             self.texture[x][y] = CanvasPoint(z, color)
 

@@ -1,22 +1,20 @@
 import numpy as np
-from math import sin, cos, tan, trunc
+from math import sin, cos, tan, trunc, sqrt
 from camera import Camera
 
 
 class PolygonMesh:
-    def __init__(self):
+    def __init__(self, renderer):
         self.camera = Camera()
         self._vertices = []
         self._translated_vertices = []
         self._faces_point_indexes = []
-        self._x_rotation_angle = 1.2
-        self._y_rotation_angle = 2.0
-        self._z_rotation_angle = -0.3
-        # self._x_translation = 200
-        # self._y_translation = 200
-        # self._z_translation = 100
-        self._x_translation = -80
-        self._y_translation = 80
+        self._width, self._height = renderer.size
+        self._x_rotation_angle = 0.1
+        self._y_rotation_angle = 2.5
+        self._z_rotation_angle = -1
+        self._x_translation = 0
+        self._y_translation = 0
         self._z_translation = 0
         self._world_matrix = np.array([])
 
@@ -30,11 +28,6 @@ class PolygonMesh:
         self.camera.observation_point_distance += distance
         self.camera.x_axis_angle += etha
         self.camera.z_axis_angle += phi
-        print(
-            self.camera.observation_point_distance,
-            self.camera.x_axis_angle,
-            self.camera.z_axis_angle
-        )
         self._translated_vertices = []
 
     def faces(self):
@@ -47,7 +40,16 @@ class PolygonMesh:
         self._translated_vertices = list(map(self._translate_vertex, self._vertices))
 
     def _translate_vertex(self, vertex):
-        x, y, z, _ = vertex.vector.dot(self._world_matrix)
+        x, y, z, w = vertex.vector.dot(self._world_matrix)
+        x, y, z = x / w, y / w, z
+        x = x * self._width + self._width / 2
+        y = -y * self._height + self._height / 2
+        # z = sqrt(
+        #     (vertex.x - self.camera.position()[0])**2 +
+        #     (vertex.y - self.camera.position()[1])**2 +
+        #     (vertex.z - self.camera.position()[2])**2
+        # )
+
         return trunc(x), trunc(y), trunc(z)
 
     def _face(self, face_point_indexes):
@@ -58,9 +60,12 @@ class PolygonMesh:
         return self._translated_vertices[point_index]
 
     def _prepare_world_matrix(self):
-        rotation = self._x_rotation().dot(self._y_rotation()).dot(self._z_rotation())
-        camera_view = self._look_at_lh().dot(self._perspective_fov_lh())
-        return rotation.dot(self._translation()).dot(camera_view)
+        view_matrix = self._look_at_lh()
+        projection_matrix = self._perspective_fov_lh()
+        pitch_roll = self._z_rotation().dot(self._x_rotation()).dot(self._y_rotation())
+        world_matrix = pitch_roll.dot(self._translation())
+        transform_matrix = world_matrix.dot(view_matrix).dot(projection_matrix)
+        return transform_matrix
 
     def _look_at_lh(self):
         up_vect = np.array([0, 1, 0])
