@@ -13,6 +13,7 @@ class Renderer:
     Y_CODE = 121
     Z_CODE = 122
     P_CODE = 112
+    R_CODE = 113
     E_CODE = 101
     D_CODE = 100
     L_SHIFT_CODE = 1073742049
@@ -55,8 +56,10 @@ class Renderer:
             self._cubes.rotate_camera(phi=self.grow_step)
         elif key_code == self.E_CODE:
             self._cubes.rotate_camera(etha=self.grow_step)
-        elif key_code == self.D_CODE:
+        elif key_code == self.R_CODE:
             self._cubes.rotate_camera(distance=self.grow_step * 1000)
+        elif key_code == self.D_CODE:
+            self._cubes.change_perspective(self.grow_step / 10)
         elif key_code == self.L_SHIFT_CODE:
             self.grow_step = -self.grow_step
         else:

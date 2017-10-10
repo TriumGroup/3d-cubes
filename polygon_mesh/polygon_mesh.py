@@ -16,6 +16,7 @@ class PolygonMesh:
         self._x_translation = 0
         self._y_translation = 0
         self._z_translation = 0
+        self._perspective = 0
         self._world_matrix = np.array([])
 
     def rotate(self, x, y, z):
@@ -28,6 +29,10 @@ class PolygonMesh:
         self.camera.observation_point_distance += distance
         self.camera.x_axis_angle += etha
         self.camera.z_axis_angle += phi
+        self._translated_vertices = []
+
+    def change_perspective(self, perspective):
+        self._perspective += perspective
         self._translated_vertices = []
 
     def faces(self):
@@ -64,8 +69,16 @@ class PolygonMesh:
         projection_matrix = self._perspective_fov_lh()
         pitch_roll = self._z_rotation().dot(self._x_rotation()).dot(self._y_rotation())
         world_matrix = pitch_roll.dot(self._translation())
-        transform_matrix = world_matrix.dot(view_matrix).dot(projection_matrix)
+        transform_matrix = world_matrix.dot(view_matrix).dot(projection_matrix).dot(self._perspective_matrix())
         return transform_matrix
+
+    def _perspective_matrix(self):
+        return np.array([
+            [1, 0, 0, self._perspective],
+            [0, 1, 0, self._perspective],
+            [0, 0, 0, -self._perspective],
+            [0, 0, 0, 1]
+        ])
 
     def _look_at_lh(self):
         up_vect = np.array([0, 1, 0])
